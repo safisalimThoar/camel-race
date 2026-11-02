@@ -1,5 +1,5 @@
 // سباق الهجن: يعمل التطبيق دون إنترنت
-const CACHE = 'camel-race-242f0f9ef0';
+const CACHE = 'camel-race-7fb5f85835';
 const ASSETS = [
   "./",
   "./index.html",

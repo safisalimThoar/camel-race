@@ -745,8 +745,10 @@ let A = null;   // the whole app: every class
 let S = null;   // the class that is open now
 
 function makeStudent(name, g, av, c){ return {id: rid(), name, g, av, c, stars: 0, rs: 0, rem: 0, wins: 0}; }
+// سطر الإعداد ثابت في الكود: لا يعدل من الإعدادات ولا يتغير باستيراد نسخة
+const CREDIT = 'إعداد: أ.صافية ثوعار - معلمة تقنية المعلومات - مدرسة حدبين للصفوف (1-12)';
 function defaultCfg(){
-  return {className:'الصف الأول', credit:'إعداد: أ.صافية ثوعار - معلمة تقنية المعلومات - مدرسة حدبين للصفوف (1-12)', teacher:'', school:'', len:10,
+  return {className:'الصف الأول', teacher:'', school:'', len:10,
     sound:true, digits:'ar', remPenalty:true, stormPenalty:true, surprises:true, noRepeat:true, levels:true};
 }
 function placeGifts(s){
@@ -1887,7 +1889,7 @@ function showIntro(){
         </ul>
       </div>
       <div class="row"><button class="btn primary start" data-act="start">هيا نبدأ السباق!</button></div>
-      ${S.cfg.credit ? `<p class="credit">${esc(S.cfg.credit)}</p>` : ''}
+      <p class="credit">${esc(CREDIT)}</p>
     </div>
     ${S.cfg.levels ? `<div class="ladder"><h3>اجمع النجوم وطور جملك</h3><ol class="steps">${LEVELS.map((L, i) => ({L, i})).reverse().map(({L, i}) => `<li class="stepc"><span class="lv-cam${i === 4 ? ' walking' : ''}">${camelSVG('#1F7AE0', '⭐', i + 1)}</span><span class="lv-lab"><b>${L.e} ${L.name}</b><small>${i ? '⭐ ' + N(L.min) : 'البداية'}</small></span></li>`).join('')}</ol></div>`
       : `<div class="intro-art" aria-hidden="true">${sample.map(s => `<div class="intro-camel walking">${camelSVG(s.c, s.av)}</div>`).join('')}</div>`}`;
@@ -1943,8 +1945,7 @@ const TAB_HTML = {
       ${sw('noRepeat', 'عدم تكرار الاسم في «من سيجيب؟»')}
       ${sw('sound', 'الأصوات')}
       <div class="toggle"><span>شكل الأرقام</span><div class="seg"><button class="${S.cfg.digits === 'ar' ? 'sel' : ''}" data-act="digits" data-d="ar">١٢٣</button><button class="${S.cfg.digits === 'en' ? 'sel' : ''}" data-act="digits" data-d="en">123</button></div></div>
-      <label class="field-in" for="cfgClass" style="margin-top:16px">اسم الصف<input type="text" id="cfgClass" data-cfg="className" value="${esc(S.cfg.className)}"></label>
-      <label class="field-in" for="cfgCredit" style="margin-top:14px">سطر الإعداد في شاشة البداية <small>يظهر لكل الصفوف، ويمكن تركه فارغا</small><input type="text" id="cfgCredit" data-cfg="credit" value="${esc(S.cfg.credit)}"></label>`;
+      <label class="field-in" for="cfgClass" style="margin-top:16px">اسم الصف<input type="text" id="cfgClass" data-cfg="className" value="${esc(S.cfg.className)}"></label>`;
   },
   beh(){
     return `<h3 class="sec-h">سلوك رائع</h3>
@@ -2278,7 +2279,7 @@ document.addEventListener('change', e => {
     if (k === 'sound' && el.checked) SFX.ding();
   } else if (el.matches('[data-cfg]')){
     const v = el.value.trim(), k = el.dataset.cfg;
-    if (k === 'teacher' || k === 'school' || k === 'credit') setGlobal(k, v);
+    if (k === 'teacher' || k === 'school') setGlobal(k, v);
     else { if (!v) return; S.cfg[k] = v; }
     commit(); renderTop();
   } else if (el.id === 'importFile' && el.files && el.files[0]){
